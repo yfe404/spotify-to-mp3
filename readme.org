@@ -4,4 +4,4 @@ Download your Spotify playlists in an MP3 format by using YouTube.
 
 ** Disclaimer
 
-Downloading copyright songs may be illegal in your country. This tool is for educational purposes only and was created only to show how Spotify's API can be exploited to download music from YouTube. Please support the artists by buying their music.
+Downloading copyrighted songs may be illegal in your country. This tool is for educational purposes only and was created only to show how Spotify's API can be exploited to download music from YouTube. Please support the artists by buying their music.
