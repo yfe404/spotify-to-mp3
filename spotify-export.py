@@ -3,7 +3,7 @@
 
 This module spins up a server to perform authentication to a
 Spotify app (see Readme) through oauth2 protocol, then uses
-the official Spotify API to retrieve  all your playlists. 
+the official Spotify API to retrieve  all your playlists.
 Finally it downloads the playlist using youtube-dl.
 """
 
@@ -35,9 +35,9 @@ class Worker(Thread):
             func, args = self.tasks.get()
             try:
                 func(*args)
-            except Exception as e:
+            except Exception as error:
                 # An exception happened while executing
-                print(e)
+                print(error)
             finally:
                 # Mark this task as done, whether an exception happened or not
                 self.tasks.task_done()
@@ -61,6 +61,15 @@ class ThreadPool:
         self.tasks.join()
 
 
+def get_headers(token):
+    """ Return a dict containing headers necessary to make a request on Spotify API endpoints """
+    return {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token,
+    }
+
+
 def get_playlist(token, playlist_id, playlist_name):
     """
     Use Spotify API to get a playlist from its id.
@@ -74,14 +83,10 @@ def get_playlist(token, playlist_id, playlist_name):
     Returns:
         A dictionary representing the playlist 
     """
-    url = "https://api.spotify.com/v1/playlists/{}/tracks".format(playlist_id)
-    headers = {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + token,
-    }
+    endpoint = "https://api.spotify.com/v1/playlists/{}/tracks".format(playlist_id)
+    headers = get_headers(token)
 
-    playlist_item = requests.get(url, headers=headers).json()
+    playlist_item = requests.get(endpoint, headers=headers).json()
     playlist = dict([("name", playlist_name), ("songs", list())])
 
     for track in playlist_item.get("items"):
@@ -111,12 +116,7 @@ def save_all_playlists(token):
         None
     """
 
-    headers = {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + token,
-    }
-
+    headers = get_headers(token)
     playlists = []
     offset = 0
     limit = 50
@@ -142,7 +142,6 @@ def save_all_playlists(token):
             ),
         )
         pool.wait_completion()
-
     #        for playlist in playlists_data:
     #            playlists.append(get_playlist(token, playlist.get('id'), playlist.get('name')))
     #
