@@ -1,5 +1,8 @@
 * Spotify to MP3
 
+[[Code style: black][file:https://img.shields.io/badge/code%20style-black-000000.svg]]
+
+
 Download your Spotify playlists in an MP3 format by using YouTube.
 
 ** Disclaimer
