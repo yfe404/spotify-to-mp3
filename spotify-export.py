@@ -95,6 +95,8 @@ def get_playlist(token, playlist_id, playlist_name):
                 ("title", track.get("track").get("name")),
                 ("artist", [a.get("name") for a in track.get("track").get("artists")]),
                 ("album", track.get("track").get("album").get("name")),
+                ("album_art_url", track.get("track").get("album").get("images")[0].get("url")),
+                ("duration_ms", track.get("track").get("duration_ms"))
             ]
         )
         playlist["songs"].append(song)
