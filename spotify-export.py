@@ -16,9 +16,12 @@ from threading import Thread
 from queue import Queue
 import requests
 
+from youtube import Youtube
+
 APP_ID = os.environ.get("APP_ID")
 APP_SECRET = os.environ.get("APP_SECRET")
 USER_ID = os.environ.get("USER_ID")
+PLAYLIST_DIR = "{}/.cache/spotify-to-mp3/playlists/".format(os.environ.get("HOME"))
 
 
 class Worker(Thread):
@@ -101,8 +104,12 @@ def get_playlist(token, playlist_id, playlist_name):
         )
         playlist["songs"].append(song)
 
+    filename = os.path.join(PLAYLIST_DIR, "{}.json".format(playlist_name))
+    with open(filename, "w") as file_descriptor:
+        json.dump(playlist, file_descriptor)
+        file_descriptor.close()
+
     print(playlist)
-    return playlist
 
 
 def save_all_playlists(token):
@@ -144,23 +151,7 @@ def save_all_playlists(token):
             ),
         )
         pool.wait_completion()
-    #        for playlist in playlists_data:
-    #            playlists.append(get_playlist(token, playlist.get('id'), playlist.get('name')))
-    #
-    #
-    #
-    #            print(playlist.get('name'))
-    #
-    exit()
-    directory = "playlists_{}".format(time.time())
-    if not os.path.exists(directory):
-        os.makedirs(directory)
 
-    for index, playlist in enumerate(playlists):
-        filename = os.path.join(directory, "{}.json".format(index))
-        with open(filename, "w") as file_descriptor:
-            json.dump(playlist, file_descriptor)
-            file_descriptor.close()
 
 
 class Server(BaseHTTPRequestHandler):
@@ -235,6 +226,13 @@ if __name__ == "__main__":
             "APP_ID, APP_SECRET and USER_ID environement variables must be defined!"
             "- See Readme for more information on this issue."
         )
+
+
+    # Create a directory to store the playlist data
+    if not os.path.exists(PLAYLIST_DIR):
+        os.makedirs(PLAYLIST_DIR)
+
+    
     HTTP_SERVER = Thread(target=run, daemon=True)
     HTTP_SERVER.start()
 
