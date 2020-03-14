@@ -16,8 +16,6 @@ from threading import Thread
 from queue import Queue
 import requests
 
-from youtube import Youtube
-
 APP_ID = os.environ.get("APP_ID")
 APP_SECRET = os.environ.get("APP_SECRET")
 USER_ID = os.environ.get("USER_ID")
@@ -126,7 +124,6 @@ def save_all_playlists(token):
     """
 
     headers = get_headers(token)
-    playlists = []
     offset = 0
     limit = 50
 
