@@ -7,19 +7,21 @@ the official Spotify API to retrieve  all your playlists.
 Finally it downloads the playlist using youtube-dl.
 """
 
+import json
 import os
 import time
 import webbrowser
-import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from threading import Thread
 from queue import Queue
+from threading import Thread
+
 import requests
+from appdirs import user_cache_dir
 
 APP_ID = os.environ.get("APP_ID")
 APP_SECRET = os.environ.get("APP_SECRET")
 USER_ID = os.environ.get("USER_ID")
-PLAYLIST_DIR = "{}/.cache/spotify-to-mp3/playlists/".format(os.environ.get("HOME"))
+PLAYLIST_DIR = os.path.join(user_cache_dir('spotify-to-mp3'), 'playlists')
 
 
 class Worker(Thread):
@@ -224,6 +226,7 @@ if __name__ == "__main__":
             "- See Readme for more information on this issue."
         )
 
+    print(f"PLAYLIST_DIR = {PLAYLIST_DIR}")
 
     # Create a directory to store the playlist data
     if not os.path.exists(PLAYLIST_DIR):
