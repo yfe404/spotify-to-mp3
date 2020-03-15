@@ -5,6 +5,17 @@
 
 Download your Spotify playlists in an MP3 format by using YouTube.
 
+#+BEGIN_SRC bash
+pip install -r requirements.txt
+#+END_SRC
+
+#+BEGIN_SRC bash
+export APP_ID=xxx APP_SECRET=xxx USER_ID=xxx
+python spotify-export.py
+#+END_SRC
+
+Get ~APP_ID~ and ~APP_SECRET~ from https://developer.spotify.com/dashboard/.
+
 ** Disclaimer
 
 Downloading copyrighted songs may be illegal in your country. This tool is for educational purposes only and was created only to show how Spotify's API can be exploited to download music from YouTube. Please support the artists by buying their music.
