@@ -17,11 +17,13 @@ from threading import Thread
 
 import requests
 from appdirs import user_cache_dir
+from dotenv import load_dotenv
 
+load_dotenv()
 APP_ID = os.environ.get("APP_ID")
 APP_SECRET = os.environ.get("APP_SECRET")
 USER_ID = os.environ.get("USER_ID")
-PLAYLIST_DIR = os.path.join(user_cache_dir('spotify-to-mp3'), 'playlists')
+PLAYLIST_DIR = os.path.join(user_cache_dir("spotify-to-mp3"), "playlists")
 
 
 class Worker(Thread):
@@ -98,8 +100,11 @@ def get_playlist(token, playlist_id, playlist_name):
                 ("title", track.get("track").get("name")),
                 ("artist", [a.get("name") for a in track.get("track").get("artists")]),
                 ("album", track.get("track").get("album").get("name")),
-                ("album_art_url", track.get("track").get("album").get("images")[0].get("url")),
-                ("duration_ms", track.get("track").get("duration_ms"))
+                (
+                    "album_art_url",
+                    track.get("track").get("album").get("images")[0].get("url"),
+                ),
+                ("duration_ms", track.get("track").get("duration_ms")),
             ]
         )
         playlist["songs"].append(song)
@@ -133,6 +138,7 @@ def save_all_playlists(token):
         endpoint = "https://api.spotify.com/v1/users/{}/playlists?limit={}&offset={}".format(
             USER_ID, limit, offset
         )
+
         playlists_data = requests.get(endpoint, headers=headers).json()["items"]
 
         offset += limit
@@ -150,7 +156,6 @@ def save_all_playlists(token):
             ),
         )
         pool.wait_completion()
-
 
 
 class Server(BaseHTTPRequestHandler):
@@ -232,7 +237,6 @@ if __name__ == "__main__":
     if not os.path.exists(PLAYLIST_DIR):
         os.makedirs(PLAYLIST_DIR)
 
-    
     HTTP_SERVER = Thread(target=run, daemon=True)
     HTTP_SERVER.start()
 
