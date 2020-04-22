@@ -1,6 +1,7 @@
 // === USER DEFINED ===
 credentials.org
-*.mp3 
+geckodriver.log
+*.mp3
 
 // AUTO-GEN by gitignore.io
 
